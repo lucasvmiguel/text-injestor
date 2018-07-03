@@ -4,8 +4,8 @@
 
 ## Overview
 
-An API to process texts.
-TODO
+An application that can ingest text, calculate statistics on the data
+& report back those stats.
 
 ## Architeture Explanation
 
@@ -18,41 +18,31 @@ the install instructions for Go](http://golang.org/doc/install.html).
 
 To install text-injestor, simply run:
 ```
-$ TODO
+git clone https://github.com/lucasvmiguel/text-injestor.git
 ```
 
 ## Configuration
 
 ```
-[github]
-token="ACCESS-TOKEN"
-per_page=NUMBER-REPOSITORIES-PER-PAGE
-
-[twitter]
-access_token="ACCESS-TOKEN"
-access_token_secret="ACCESS-TOKEN-SECRET"
-consumer_key="CONSUMER-KEY"
-consumer_secret="CONSUMER-SECRET"
-```
-
-## Usage
-
-command:
-```
-$ TODO
-```
-
-## Example
-
-config file:
-```
 [http]
 port=":8080"
+[http.handlers]
+stats="/stats"
 ```
+
+## Usage Without Docker
 
 command:
 ```
-$ TODO
+$ make run
+```
+
+## Usage With Docker
+
+command:
+```
+$ make docker-build
+$ make docker-run
 ```
 
 ## Documentation
