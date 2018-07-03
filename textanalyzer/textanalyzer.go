@@ -62,18 +62,18 @@ func (c *Client) NumberOfWords() (total int) {
 // FiveMostUsedWords return five most used words
 func (c *Client) FiveMostUsedWords() []string {
 	mostUsedWords := c.sortMostUsedWords()
+	var words []string
 
-	if mostUsedWords.Len() >= 5 {
-		return []string{
-			mostUsedWords[0].Key,
-			mostUsedWords[1].Key,
-			mostUsedWords[2].Key,
-			mostUsedWords[3].Key,
-			mostUsedWords[4].Key,
+	for i, pairWord := range mostUsedWords {
+		words = append(words, pairWord.Key)
+
+		// stop it there are more than 5 words
+		if i == 4 {
+			break
 		}
 	}
 
-	return []string{}
+	return words
 }
 
 func indexWordsMap(text string) (cmap.ConcurrentMap, int, int, error) {
@@ -82,6 +82,9 @@ func indexWordsMap(text string) (cmap.ConcurrentMap, int, int, error) {
 	totalChars := 0
 
 	totalChars = utf8.RuneCountInString(removeInvalidChars(text))
+
+	// text in downcase
+	text = strings.ToLower(text)
 
 	// tranform break line into whitespace
 	wordsInSameLine := strings.Replace(text, "\n", " ", 0)
