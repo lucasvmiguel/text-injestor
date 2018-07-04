@@ -131,7 +131,7 @@ func TestNumberOfLines(t *testing.T) {
 	}
 }
 
-func TestFiveMostUsedWords(t *testing.T) {
+func TestMostUsedWords(t *testing.T) {
 	var tests = []struct {
 		params   string
 		expected []string
@@ -152,7 +152,7 @@ func TestFiveMostUsedWords(t *testing.T) {
 
 	for _, test := range tests {
 		client, _ := New(test.params)
-		actual := client.FiveMostUsedWords()
+		actual := client.MostUsedWords(5)
 
 		if !reflect.DeepEqual(actual, test.expected) {
 			t.Errorf("result: %#v | expected: %#v", actual, test.expected)

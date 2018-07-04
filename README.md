@@ -5,7 +5,7 @@
 ## Overview
 
 An application that can ingest text, calculate statistics on the data
-& report back those stats.
+and report back those stats.
 
 Usually, I prefer a code without a lot of comments, but I think it is the best way to explain my logic in this case.
 
@@ -18,9 +18,9 @@ There are 3 main packages:
   * I wouldn't need to store the words total, characters total, etc, but I think that processing the text once and store all kind of information is better than processing for each kind of information
 
 
-More about my way to architect:
-[dependencies](https://medium.com/@LucasVieiraDev/dependencies-in-golang-projects-f46a11fef832)
-[configuration](https://medium.com/@LucasVieiraDev/configuration-in-golang-packages-6bcda76d011b)
+More about the architecture chosen:
+* [dependencies](https://medium.com/@LucasVieiraDev/dependencies-in-golang-projects-f46a11fef832)
+* [configuration](https://medium.com/@LucasVieiraDev/configuration-in-golang-packages-6bcda76d011b)
 
 ## Installation
 

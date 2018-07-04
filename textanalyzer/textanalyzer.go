@@ -66,16 +66,16 @@ func (c *Client) NumberOfWords() (total int) {
 	return c.totalWords
 }
 
-// FiveMostUsedWords return five most used words
-func (c *Client) FiveMostUsedWords() []string {
+// MostUsedWords return N most used words
+func (c *Client) MostUsedWords(numberOfWords int) []string {
 	mostUsedWords := c.sortMostUsedWords()
 	var words []string
 
 	for i, pairWord := range mostUsedWords {
 		words = append(words, pairWord.Key)
 
-		// break to get just 5 words
-		if i == 4 {
+		// break to get just N words
+		if i == (numberOfWords - 1) {
 			break
 		}
 	}
@@ -115,7 +115,7 @@ func normalizeTextToIndex(text string) (string, error) {
 }
 
 // buildWordsMapAndCount puts all words in a map and count
-// this function has two responsibilities(build map and count words) to be more performatic
+// this function has two responsibilities to be more performatic
 func buildWordsMapAndCount(words []string) (cmap.ConcurrentMap, int) {
 	wordsCount := 0
 	wordsMap := cmap.New()

@@ -62,7 +62,7 @@ func Stats(w http.ResponseWriter, r *http.Request) {
 // buildStatsResponse build stats response splitting different tasks in differents goroutines
 // for bigger texts the results will be better
 // but for small texts the results will be equal or worst
-// you can check with the benchmark that I jave created on the stats_test.go
+// you can check with the benchmark that I've created on the stats_test.go
 func buildStatsResponse(taClient textanalyzer.Client) *stats {
 	statsObj := &stats{
 		Words:      taClient.NumberOfWords(),
@@ -77,7 +77,7 @@ func buildStatsResponse(taClient textanalyzer.Client) *stats {
 		wg.Done()
 	}()
 	go func() {
-		statsObj.Top5Words = taClient.FiveMostUsedWords()
+		statsObj.Top5Words = taClient.MostUsedWords(5)
 		wg.Done()
 	}()
 

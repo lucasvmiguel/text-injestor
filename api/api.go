@@ -11,7 +11,7 @@ type Client struct {
 	config Config
 }
 
-// New receives the configuration
+// New receives the configuration and return client http
 func New(config Config) (Client, error) {
 	if config.Port == "" {
 		return Client{}, errors.New("invalid port")
