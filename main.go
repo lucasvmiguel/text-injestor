@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type config struct {
+type appConfig struct {
 	http httpConfig
 }
 
@@ -22,31 +22,14 @@ type httpHandlersConfig struct {
 	stats string
 }
 
-func loadConfig() (config, error) {
-	viper.AddConfigPath(".")
-	viper.SetConfigName("config")
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		return config{}, errors.Wrap(err, "error to read config")
-	}
-
-	return config{
-		httpConfig{
-			port: viper.GetString("http.port"),
-			handlers: httpHandlersConfig{
-				stats: viper.GetString("http.handlers.stats"),
-			},
-		},
-	}, nil
-}
-
 func main() {
+	// load config from a config file (config.toml)
 	config, err := loadConfig()
 	if err != nil {
 		panic(err)
 	}
 
+	// mount the api config
 	apiConfig := api.Config{
 		Port: config.http.port,
 		Handlers: map[string]func(w http.ResponseWriter, r *http.Request){
@@ -54,10 +37,34 @@ func main() {
 		},
 	}
 
+	// create a new api instance with the api config
 	apiClient, err := api.New(apiConfig)
 	if err != nil {
 		panic(errors.Wrap(err, "error to initialize api"))
 	}
 
-	apiClient.Run()
+	// run the api
+	err = apiClient.Run()
+	if err != nil {
+		panic(errors.Wrap(err, "error to run the api"))
+	}
+}
+
+func loadConfig() (appConfig, error) {
+	viper.AddConfigPath(".")
+	viper.SetConfigName("config")
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		return appConfig{}, errors.Wrap(err, "error to read config")
+	}
+
+	return appConfig{
+		httpConfig{
+			port: viper.GetString("http.port"),
+			handlers: httpHandlersConfig{
+				stats: viper.GetString("http.handlers.stats"),
+			},
+		},
+	}, nil
 }

@@ -29,6 +29,6 @@ func New(config Config) (Client, error) {
 }
 
 // Run http server
-func (c *Client) Run() {
-	http.ListenAndServe(c.config.Port, nil)
+func (c *Client) Run() error {
+	return http.ListenAndServe(c.config.Port, nil)
 }

@@ -20,7 +20,7 @@ type stats struct {
 	Top5Words  []string `json:"top_5_words"`
 }
 
-// Stats stats http handler
+// Stats stats http handler - only POST method allowed
 func Stats(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusNotFound)
@@ -35,7 +35,7 @@ func Stats(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	taClient, err := textanalyzer.New(string(body))
+	taClient, err := textanalyzer.New(string(body), false)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "500 internal server error")
