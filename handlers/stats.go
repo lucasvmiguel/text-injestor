@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sync"
 
 	"github.com/lucasvmiguel/text-injestor/textanalyzer"
 )
@@ -35,7 +36,7 @@ func Stats(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	taClient, err := textanalyzer.New(string(body), false)
+	taClient, err := textanalyzer.New(string(body))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "500 internal server error")
@@ -43,12 +44,7 @@ func Stats(w http.ResponseWriter, r *http.Request) {
 	}
 
 	statsResponse := statsResponse{
-		Stats: stats{
-			Lines:      taClient.NumberOfLines(),
-			Characters: taClient.NumberOfChars(),
-			Words:      taClient.NumberOfWords(),
-			Top5Words:  taClient.FiveMostUsedWords(),
-		},
+		Stats: *buildStatsResponse(taClient),
 	}
 
 	data, err := json.Marshal(statsResponse)
@@ -61,4 +57,31 @@ func Stats(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
+}
+
+// buildStatsResponse build stats response splitting different tasks in differents goroutines
+// for bigger texts the results will be better
+// but for small texts the results will be equal or worst
+// you can check with the benchmark that I jave created on the stats_test.go
+func buildStatsResponse(taClient textanalyzer.Client) *stats {
+	statsObj := &stats{
+		Words:      taClient.NumberOfWords(),
+		Characters: taClient.NumberOfChars(),
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		statsObj.Lines = taClient.NumberOfLines()
+		wg.Done()
+	}()
+	go func() {
+		statsObj.Top5Words = taClient.FiveMostUsedWords()
+		wg.Done()
+	}()
+
+	wg.Wait()
+
+	return statsObj
 }

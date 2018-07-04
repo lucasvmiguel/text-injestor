@@ -79,3 +79,13 @@ func TestStats(t *testing.T) {
 			rr.Body.String(), expected)
 	}
 }
+
+// BenchmarkStats-4 (Without WaitGroup) 2164 ns/op	1216 B/op  9 allocs/op
+// BenchmarkStats-4 (With WaitGroup)    2109 ns/op	1216 B/op	 9 allocs/op
+func BenchmarkStats(b *testing.B) {
+	req, _ := http.NewRequest("POST", "/stats", strings.NewReader(testText))
+	for i := 0; i < b.N; i++ {
+		rw := httptest.NewRecorder()
+		Stats(rw, req)
+	}
+}

@@ -24,7 +24,7 @@ func TestNew(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		_, actual := New(test.params, false)
+		_, actual := New(test.params)
 
 		if actual != test.expected && actual.Error() != test.expected.Error() {
 			t.Errorf("result: %s | expected: %s", actual, test.expected)
@@ -56,7 +56,7 @@ func TestNumberOfChars(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		client, _ := New(test.params, false)
+		client, _ := New(test.params)
 		actual := client.NumberOfChars()
 
 		if actual != test.expected {
@@ -89,7 +89,7 @@ func TestNumberOfWords(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		client, _ := New(test.params, false)
+		client, _ := New(test.params)
 		actual := client.NumberOfWords()
 
 		if actual != test.expected {
@@ -122,7 +122,7 @@ func TestNumberOfLines(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		client, _ := New(test.params, false)
+		client, _ := New(test.params)
 		actual := client.NumberOfLines()
 
 		if actual != test.expected {
@@ -151,7 +151,7 @@ func TestFiveMostUsedWords(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		client, _ := New(test.params, false)
+		client, _ := New(test.params)
 		actual := client.FiveMostUsedWords()
 
 		if !reflect.DeepEqual(actual, test.expected) {
@@ -160,26 +160,10 @@ func TestFiveMostUsedWords(t *testing.T) {
 	}
 }
 
-func BenchmarkNewWithSmallText(b *testing.B) {
+func BenchmarkNew(b *testing.B) {
 	smallText := strings.Repeat(testText1, 10)
 
 	for n := 0; n < b.N; n++ {
-		New(smallText, false)
-	}
-}
-
-func BenchmarkNewWithMediumText(b *testing.B) {
-	mediumText := strings.Repeat(testText1, 100)
-
-	for n := 0; n < b.N; n++ {
-		New(mediumText, false)
-	}
-}
-
-func BenchmarkNewWithHugeText(b *testing.B) {
-	hugeText := strings.Repeat(testText1, 1000)
-
-	for n := 0; n < b.N; n++ {
-		New(hugeText, false)
+		New(smallText)
 	}
 }

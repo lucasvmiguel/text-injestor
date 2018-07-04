@@ -19,7 +19,7 @@ type Client struct {
 }
 
 // New receives the text and index
-func New(text string, async bool) (Client, error) {
+func New(text string) (Client, error) {
 	if text == "" {
 		return Client{}, errors.New("error empty text")
 	}
@@ -28,11 +28,7 @@ func New(text string, async bool) (Client, error) {
 	var totalWords int
 	var err error
 
-	if async {
-		wordsMap, totalWords, err = indexWordsMapSync(text)
-	} else {
-		wordsMap, totalWords, err = indexWordsMapSync(text)
-	}
+	wordsMap, totalWords, err = indexWordsMap(text)
 
 	if err != nil {
 		return Client{}, errors.Wrap(err, "error to index words map")
@@ -87,8 +83,8 @@ func (c *Client) FiveMostUsedWords() []string {
 	return words
 }
 
-// indexWordsMapSync index all words of text in a map and count how many words
-func indexWordsMapSync(text string) (cmap.ConcurrentMap, int, error) {
+// indexWordsMap index all words of text in a map and count how many words
+func indexWordsMap(text string) (cmap.ConcurrentMap, int, error) {
 	var wordsMap cmap.ConcurrentMap
 	var totalWords int
 
@@ -99,9 +95,7 @@ func indexWordsMapSync(text string) (cmap.ConcurrentMap, int, error) {
 
 	splittedWords := strings.Split(cleanText, " ")
 
-	wordsMap = buildWordsMap(splittedWords)
-
-	totalWords = countValidWords(splittedWords)
+	wordsMap, totalWords = buildWordsMapAndCount(splittedWords)
 
 	return wordsMap, totalWords, nil
 }
@@ -120,8 +114,10 @@ func normalizeTextToIndex(text string) (string, error) {
 	return cleanText, nil
 }
 
-// buildWordsMap puts all words in a map and count
-func buildWordsMap(words []string) cmap.ConcurrentMap {
+// buildWordsMapAndCount puts all words in a map and count
+// this function has two responsibilities(build map and count words) to be more performatic
+func buildWordsMapAndCount(words []string) (cmap.ConcurrentMap, int) {
+	wordsCount := 0
 	wordsMap := cmap.New()
 
 	for _, word := range words {
@@ -139,27 +135,13 @@ func buildWordsMap(words []string) cmap.ConcurrentMap {
 		} else {
 			wordsMap.Set(word, 1)
 		}
+
+		wordsCount = wordsCount + 1
 	}
 
-	return wordsMap
+	return wordsMap, wordsCount
 }
 
-// countValidWords - empty string is not valid
-func countValidWords(words []string) int {
-	var counter int
-
-	for _, word := range words {
-		if word == "" {
-			continue
-		}
-
-		counter = counter + 1
-	}
-
-	return counter
-}
-
-// removeInvalidChars
 func removeInvalidChars(text string) string {
 	return strings.NewReplacer(
 		" ", "",
