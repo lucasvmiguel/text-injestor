@@ -8,7 +8,7 @@ test-unit:
 	GOCACHE=off go test -v -cover -race ./...
 
 test-e2e:
-	timeout 20s make run &
+	timeout 10s make run &
 	cd _tests_/e2e && GOCACHE=off go test -v -cover -race
 
 docker-build:
