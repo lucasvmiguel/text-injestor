@@ -30,3 +30,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/orcaman/concurrent-map"
+
+[[constraint]]
+  name = "gopkg.in/h2non/baloo.v3"
+  version = "3.0.0"
