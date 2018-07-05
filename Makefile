@@ -4,8 +4,12 @@ run:
 build:
 	go build main.go
 
-test:
-	go test -v -cover -race ./...
+test-unit:
+	GOCACHE=off go test -v -cover -race ./...
+
+test-e2e:
+	timeout 10s make run &
+	cd _tests_/e2e && GOCACHE=off go test -v -cover -race
 
 docker-build:
 	docker build -t text-injestor .

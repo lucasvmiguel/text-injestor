@@ -56,6 +56,22 @@ $ make docker-build
 $ make docker-run
 ```
 
+## Testing
+
+### Unit
+
+command:
+```
+$ make test-unit
+```
+
+### E2E
+
+command:
+```
+$ make test-e2e
+```
+
 ## Documentation
 
 [Here](https://godoc.org/github.com/lucasvmiguel/text-injestor)

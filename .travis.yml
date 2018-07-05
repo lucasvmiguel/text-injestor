@@ -2,5 +2,6 @@ language: go
 go: 1.10.x
 
 script:
-  - make test
+  - make test-unit
+  - make test-e2e
   - make build
