@@ -15,4 +15,4 @@ docker-build:
 	docker build -t text-injestor .
 
 docker-run:
-	docker run -d -p 8080:8080 text-injestor
+	docker run -p 8080:8080 text-injestor
