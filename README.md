@@ -32,15 +32,6 @@ To install text-injestor, simply run:
 git clone https://github.com/lucasvmiguel/text-injestor.git
 ```
 
-## Configuration
-
-```
-[http]
-port=":8080"
-[http.handlers]
-stats="/stats"
-```
-
 ## Usage Without Docker
 
 command:
@@ -70,6 +61,16 @@ $ make test-unit
 command:
 ```
 $ make test-e2e
+```
+
+## Configuration
+
+config.toml
+```
+[http]
+port=":8080"
+[http.handlers]
+stats="/stats"
 ```
 
 ## Documentation
